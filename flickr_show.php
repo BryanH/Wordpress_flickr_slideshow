@@ -3,7 +3,7 @@
  * Plugin Name: Flickr Slideshow Shortcode
  * Plugin URI: http://hbjitney.com/flickr-show.html
  * Description: Embed a flickr slideshow in your posts by using a simple shortcode: [flickr-show set=7239827373283]<br />You set the height, width and username in the settings.
- * Version: 1.03
+ * Version: 1.05
  * Author: HBJitney, LLC
  * Author URI: http://hbjitney.com/
  * License: GPL3
@@ -43,7 +43,7 @@ if ( !class_exists('FlickrShow' ) ) {
 		 * Add our options to the settings menu
 		 */
 		function add_admin() {
-			add_options_page("Flickr Slideshow Shortcode", "Flickr Slideshow Shortcode", 'manage_options', 'acth_plugin', array( $this, 'plugin_options_page' ) );
+			add_options_page("Flickr Slideshow Shortcode", "Flickr Slideshow Shortcode", 'manage_options', 'flickr_show_plugin', array( $this, 'plugin_options_page' ) );
 		}
 
 		/**
