@@ -2,7 +2,7 @@
 /*
  * Plugin Name: Flickr Slideshow Shortcode
  * Plugin URI: http://hbjitney.com/flickr-show.html
- * Description: Embed a flickr slideshow in your posts by using a simple shortcode: [flickr-show set=7239827373283]<br />You set the height, width and username in the settings.
+ * Description: Embed a flickr slideshow in your posts by using a simple shortcode: [flickr-show set=7239827373283] You set the height, width and username in the settings.
  * Version: 1.05
  * Author: HBJitney, LLC
  * Author URI: http://hbjitney.com/
@@ -153,7 +153,7 @@ codebase=\"http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#v
 <param name=\"src\" value=\"http://www.flickr.com/apps/slideshow/show.swf?v=71649\" />
 <embed width=\"{$width}\" height=\"{$height}\" type=\"application/x-shockwave-flash\" src=\"http://www.flickr.com/apps/slideshow/show.swf?v=71649\"
 flashvars=\"offsite=true&amp;lang=en-us&amp;page_show_url=%2Fphotos%2F{$username}%2Fsets%2F$1%2Fshow%2F&amp;page_show_back_url=%2Fphotos%2F{$username}%2Fsets%2F$1%2F&amp;set_id=$1&amp;jump_to=\"
-allowFullScreen=\"true\" />
+allowFullScreen=\"true\" /></object>
 ",
 				$content);
 
