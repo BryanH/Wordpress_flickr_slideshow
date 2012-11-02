@@ -2,8 +2,8 @@
 /*
  * Plugin Name: Flickr Slideshow Shortcode
  * Plugin URI: http://hbjitney.com/flickr-show.html
- * Description: Embed a flickr slideshow in your posts by using a simple shortcode: [flickr-show set=7239827373283] You set the height, width and username in the settings.
- * Version: 1.05
+ * Description: Embed a flickr slideshow in your posts by using a simple shortcode: [flickr_slideshow set=7239827373283] You set the height, width and username in the settings.
+ * Version: 1.09
  * Author: HBJitney, LLC
  * Author URI: http://hbjitney.com/
  * License: GPL3
@@ -22,12 +22,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-if ( !class_exists('FlickrShow' ) ) {
+if ( !class_exists('FlicrShowPi' ) ) {
 	/**
  	* Wrapper class to isolate us from the global space in order
  	* to prevent method collision
  	*/
-	class FlickrShow {
+	class FlickrShowPi {
 		var $plugin_name;
 
 		/**
@@ -36,14 +36,16 @@ if ( !class_exists('FlickrShow' ) ) {
 		function __construct() {
 			add_action( 'admin_menu', array( $this, 'add_admin' ) );
 			add_action( 'admin_init', array( $this, 'admin_init' ) );
-			add_filter( 'the_content', array( $this, 'flickr_show_shortcode' ) );
+			add_shortcode( 'flickr_show', array( $this, 'flickr_show_shortcode' ) );
+			add_shortcode( 'flickr_slideshow', array( $this, 'flickr_show_shortcode' ) );
+
 		}
 
 		/**
 		 * Add our options to the settings menu
 		 */
 		function add_admin() {
-			add_options_page("Flickr Slideshow Shortcode", "Flickr Slideshow Shortcode", 'manage_options', 'flickr_show_plugin', array( $this, 'plugin_options_page' ) );
+			add_options_page( __( "Flickr Slideshow Shortcode" ), __( "Flickr Slideshow Shortcode" ), 'manage_options', 'flickr_show_plugin', array( $this, 'plugin_options_page' ) );
 		}
 
 		/**
@@ -52,8 +54,8 @@ if ( !class_exists('FlickrShow' ) ) {
 		function plugin_options_page() {
 ?>
 		<div class="plugin-options">
-		<h2><span>Flickr Slideshow Shortcode Options</span></h2>
-                <p>Here you can set the defaults for the shortcode, so you only have to specify the set number in your posts.</p>
+		<h2><span><?php _e( "Flickr Slideshow Shortcode Options" ); ?></span></h2>
+		<p><?php _e( "Here you set the defaults for the shortcode, so you only have to specify the set number in your posts." ); ?></p>
 		 <form action="options.php" method="post">
 <?php
 		  settings_fields( 'flickr_show_options' );
@@ -75,18 +77,15 @@ if ( !class_exists('FlickrShow' ) ) {
 			// Unique ID, section title displayed, section callback, page name = do_settings_section
 			add_settings_section( 'flickr_show_section', '', array( $this, 'main_section' ), 'flickr_show_plugin' );
 			// Unique ID, Title, function callback, page name = do_settings_section, section name
-			add_settings_field( 'flickr_width', 'Width', array( $this, 'width_field'), 'flickr_show_plugin', 'flickr_show_section');
-			add_settings_field( 'flickr_height', 'Height', array( $this, 'height_field'), 'flickr_show_plugin', 'flickr_show_section');
-			add_settings_field( 'flickr_username', 'Username', array( $this, 'username_field'), 'flickr_show_plugin', 'flickr_show_section');
+			add_settings_field( 'flickr_width', __( 'Width (in pixels)' ), array( $this, 'width_field'), 'flickr_show_plugin', 'flickr_show_section');
+			add_settings_field( 'flickr_height', __('Height (in pixels)' ), array( $this, 'height_field'), 'flickr_show_plugin', 'flickr_show_section');
+			add_settings_field( 'flickr_username', __( 'Username' ), array( $this, 'username_field'), 'flickr_show_plugin', 'flickr_show_section');
 		}
 
 		/*
 		 * Static content for options section
 		 */
 		function main_section() {
-?>
-			<h3><span>Defaults</span></h3>
-<?php
 		}
 
 		/*
@@ -109,7 +108,7 @@ _e( $options['height_string'] );?>" />
 			$options = get_option( 'flickr_show_options' );
 ?>
 			<input id="flickr_width_string" name="flickr_show_options[width_string]" type="text" size="4" value="<?php
-_e( $options['width_string'] );?>" />
+_e( $options['width_string'] ); ?>" />
 <?php
 		}
 		/*
@@ -125,37 +124,65 @@ _e( $options['width_string'] );?>" />
 		}
 
 		/*
-		 * No validation, just remove leading and trailing spaces
+		 * Validate presense of parameters
+		 * Verify height, width are numbers
 		 */
-		function options_validate($input) {
-			$newinput['height_string'] = trim( $input['height_string'] );
-			$newinput['width_string'] = trim( $input['width_string'] );
-			$newinput['username_string'] = trim( $input['username_string'] );
-			return $newinput;
+		function options_validate( $input ) {
+				$height = trim( $input['height_string'] );
+				if( empty( $height ) ) {
+						add_settings_error( "flickr_height_string", '', __( "Height is requred." ) );
+				} else {
+						if( intval( $height ) !== trim( $input['height_string'] ) ) {
+								add_settings_error( "flickr_height_string", '', __( "Invalid height. Must be a whole number only." ) );
+						}
+				}
+
+				$newinput['height_string'] = $height;
+
+				$width = trim( $input['width_string'] );
+				if( empty( $width ) ) {
+						add_settings_error( "flickr_width_string", '', __( "Width is requred." ) );
+				} else {
+						if( intval( $width ) !== trim( $input['width_string'] ) ) {
+								add_settings_error( "flickr_width_string", '', __( "Invalid width. Must be a whole number only." ) );
+						}
+				}
+
+				$newinput['width_string'] = $width;
+
+				$username = trim( $input['username_string'] );
+				if( empty( $username ) ) {
+						add_settings_error( "flickr_username_string", '', __( "Username is requred." ) );
+				}
+
+				$newinput['username_string'] = $username;
+
+				return $newinput;
 		}
 
 		/*
 		 * Process the content for the shortcode
 		 */
-		function flickr_show_shortcode( $content ) {
+		function flickr_show_shortcode( $attributes ) {
+			extract( shortcode_atts( array(
+				'set' => 'missing set attribute'
+		), $attributes));
+
 			$options = get_option( 'flickr_show_options' );
 			$height = $options['height_string'];
 			$width = $options['width_string'];
 			$username = $options['username_string'];
 
-				//'[flickr-show (height=([0-9]+)){0,1}\s*(width=([0-9]+)){0,1}\s*set_id=([0-9]+)\s*(username=([a-zA-Z0-9]+)){0,1}]',
-			$content = preg_replace(
-				'/\[flickr-show\s*set=([a-zA-Z0-9]+)\s*\]/',
+			$content =
 				"<object width=\"{$width}\" height=\"{$height}\" classid=\"clsid:d27cdb6e-ae6d-11cf-96b8-444553540000\"
 codebase=\"http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0\">
-<param name=\"flashvars\" value=\"offsite=true&amp;lang=en-us&amp;page_show_url=%2Fphotos%2F{$username}%2Fsets%2F$1%2Fshow%2F&amp;page_show_back_url=%2Fphotos%2F{$username}%2Fsets%2F$1%2F&amp;set_id=$1&amp;jump_to=\" />
+<param name=\"flashvars\" value=\"offsite=true&amp;lang=en-us&amp;page_show_url=%2Fphotos%2F{$username}%2Fsets%2F$set%2Fshow%2F&amp;page_show_back_url=%2Fphotos%2F{$username}%2Fsets%2F$set%2F&amp;set_id=$set&amp;jump_to=\" />
 <param name=\"allowFullScreen\" value=\"true\" />
 <param name=\"src\" value=\"http://www.flickr.com/apps/slideshow/show.swf?v=71649\" />
 <embed width=\"{$width}\" height=\"{$height}\" type=\"application/x-shockwave-flash\" src=\"http://www.flickr.com/apps/slideshow/show.swf?v=71649\"
-flashvars=\"offsite=true&amp;lang=en-us&amp;page_show_url=%2Fphotos%2F{$username}%2Fsets%2F$1%2Fshow%2F&amp;page_show_back_url=%2Fphotos%2F{$username}%2Fsets%2F$1%2F&amp;set_id=$1&amp;jump_to=\"
+flashvars=\"offsite=true&amp;lang=en-us&amp;page_show_url=%2Fphotos%2F{$username}%2Fsets%2F$set%2Fshow%2F&amp;page_show_back_url=%2Fphotos%2F{$username}%2Fsets%2F$set%2F&amp;set_id=$set&amp;jump_to=\"
 allowFullScreen=\"true\" /></object>
-",
-				$content);
+";
 
 			return $content;
 		}
@@ -166,8 +193,8 @@ allowFullScreen=\"true\" /></object>
  * Sanity - was there a problem setting up the class? If so, bail with error
  * Otherwise, class is now defined; create a new one it to get the ball rolling.
  */
-if( class_exists( 'FlickrShow' ) ) {
-	new FlickrShow();
+if( class_exists( 'FlickrShowPi' ) ) {
+	new FlickrShowPi();
 } else {
 	$message = "<h2 style='color:red'>Error in plugin</h2>
 	<p>Sorry about that! Plugin <span style='color:blue;font-family:monospace'>flickr-show</span> reports that it was unable to start.</p>
