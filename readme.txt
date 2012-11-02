@@ -34,7 +34,8 @@ Extract the zip file and drop the contents in the wp-content/plugins/ directory 
 == Changelog ==
 = 1.10 =
 * Cleaned up shortcode filter and made it more robust
-* Addresses issue of shortcode in embedded page not working
+* Fixed typos in settings screen
+* Fixed bug that wouldn't let you save settings
 
 = 1.09 =
 * Standardized plugin text
@@ -52,4 +53,4 @@ Extract the zip file and drop the contents in the wp-content/plugins/ directory 
 == Upgrade Notice ==
 
 = 1.10 =
-*
+* Fixed settings screen bugs

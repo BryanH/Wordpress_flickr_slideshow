@@ -3,7 +3,7 @@
  * Plugin Name: Flickr Slideshow Shortcode
  * Plugin URI: http://hbjitney.com/flickr-show.html
  * Description: Embed a flickr slideshow in your posts by using a simple shortcode: [flickr_slideshow set=7239827373283] You set the height, width and username in the settings.
- * Version: 1.09
+ * Version: 1.10
  * Author: HBJitney, LLC
  * Author URI: http://hbjitney.com/
  * License: GPL3
@@ -130,29 +130,21 @@ _e( $options['width_string'] ); ?>" />
 		function options_validate( $input ) {
 				$height = trim( $input['height_string'] );
 				if( empty( $height ) ) {
-						add_settings_error( "flickr_height_string", '', __( "Height is requred." ) );
-				} else {
-						if( intval( $height ) !== trim( $input['height_string'] ) ) {
-								add_settings_error( "flickr_height_string", '', __( "Invalid height. Must be a whole number only." ) );
-						}
+						add_settings_error( "flickr_height_string", '', __( "Height is required." ) );
 				}
 
 				$newinput['height_string'] = $height;
 
 				$width = trim( $input['width_string'] );
 				if( empty( $width ) ) {
-						add_settings_error( "flickr_width_string", '', __( "Width is requred." ) );
-				} else {
-						if( intval( $width ) !== trim( $input['width_string'] ) ) {
-								add_settings_error( "flickr_width_string", '', __( "Invalid width. Must be a whole number only." ) );
-						}
+						add_settings_error( "flickr_width_string", '', __( "Width is required." ) );
 				}
 
 				$newinput['width_string'] = $width;
 
 				$username = trim( $input['username_string'] );
 				if( empty( $username ) ) {
-						add_settings_error( "flickr_username_string", '', __( "Username is requred." ) );
+						add_settings_error( "flickr_username_string", '', __( "Username is required." ) );
 				}
 
 				$newinput['username_string'] = $username;
