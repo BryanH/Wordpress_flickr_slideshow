@@ -11,15 +11,9 @@ Embed a flickr slideshow in your posts by using a shortcode, for example [flickr
 
 Embed your flickr slideshows in your posts by using a simple shortcode: [flickr_slideshow set=7239827373283]
 
-In the settings menu, you will need to set the height, width and username for the sets.
+The value of the `set` parameter is the ID of your Flickr slideshow set.
 
-The username is the code in the address of the flickr user's (your) page.
-
-For example:
-
-http://www.flickr.com/photos/121713422@J46/
-
-The *username* is 121713422@J46
+In the settings menu, you will need to set the height and width for the sets.
 
 
 == Installation ==

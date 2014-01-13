@@ -79,7 +79,6 @@ if ( !class_exists('FlicrShowPi' ) ) {
 			// Unique ID, Title, function callback, page name = do_settings_section, section name
 			add_settings_field( 'flickr_width', __( 'Width (in pixels)' ), array( $this, 'width_field'), 'flickr_show_plugin', 'flickr_show_section');
 			add_settings_field( 'flickr_height', __('Height (in pixels)' ), array( $this, 'height_field'), 'flickr_show_plugin', 'flickr_show_section');
-			add_settings_field( 'flickr_username', __( 'Username' ), array( $this, 'username_field'), 'flickr_show_plugin', 'flickr_show_section');
 		}
 
 		/*
@@ -111,17 +110,6 @@ _e( $options['height_string'] );?>" />
 _e( $options['width_string'] ); ?>" />
 <?php
 		}
-		/*
-		 * Code for height field
-		 */
-		function username_field() {
-			// Matches field # of register_setting
-			$options = get_option( 'flickr_show_options' );
-?>
-			<input id="flickr_username_string" name="flickr_show_options[username_string]" type="text" size="20" value="<?php
- _e( $options['username_string'] );?>" />
-<?php
-		}
 
 		/*
 		 * Validate presense of parameters
@@ -142,12 +130,6 @@ _e( $options['width_string'] ); ?>" />
 
 				$newinput['width_string'] = $width;
 
-				$username = trim( $input['username_string'] );
-				if( empty( $username ) ) {
-						add_settings_error( "flickr_username_string", '', __( "Username is required." ) );
-				}
-
-				$newinput['username_string'] = $username;
 
 				return $newinput;
 		}
@@ -163,10 +145,9 @@ _e( $options['width_string'] ); ?>" />
 			$options = get_option( 'flickr_show_options' );
 			$height = $options['height_string'];
 			$width = $options['width_string'];
-			$username = $options['username_string'];
 
 			$content =
-				"<iframe height=\"${height}\" width=\"${width}\" src=\"http://www.flickr.com/slideShow/index.gne?set_id=${username}\"></iframe>";
+				"<iframe height=\"${height}\" width=\"${width}\" src=\"http://www.flickr.com/slideShow/index.gne?set_id=${set}\"></iframe>";
 
 			return $content;
 		}
