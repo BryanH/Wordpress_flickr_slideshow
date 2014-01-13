@@ -2,7 +2,7 @@
 Contributors: HB Jitney
 Tags: slideshow, flickr, image, flash
 Requires at least: 3.4.0
-Tested up to: 3.4.2
+Tested up to: 3.8.0
 Stable tag: trunk
 
 Embed a flickr slideshow in your posts by using a shortcode, for example [flickr_slideshow set=7239827373283]
@@ -32,6 +32,9 @@ Extract the zip file and drop the contents in the wp-content/plugins/ directory 
 2. Shortcode in post
 
 == Changelog ==
+= 1.11 =
+* Modified output to be compatible with Mobile devices.
+
 = 1.10 =
 * Cleaned up shortcode filter and made it more robust
 * Fixed typos in settings screen
@@ -52,5 +55,5 @@ Extract the zip file and drop the contents in the wp-content/plugins/ directory 
 
 == Upgrade Notice ==
 
-= 1.10 =
-* Fixed settings screen bugs
+= 1.11 =
+* Flickr Slideshow now compatible with mobile devices

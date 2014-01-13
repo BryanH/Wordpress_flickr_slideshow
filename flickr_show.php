@@ -3,7 +3,7 @@
  * Plugin Name: Flickr Slideshow Shortcode
  * Plugin URI: http://hbjitney.com/flickr-show.html
  * Description: Embed a flickr slideshow in your posts by using a simple shortcode: [flickr_slideshow set=7239827373283] You set the height, width and username in the settings.
- * Version: 1.10
+ * Version: 1.11
  * Author: HBJitney, LLC
  * Author URI: http://hbjitney.com/
  * License: GPL3
@@ -166,15 +166,7 @@ _e( $options['width_string'] ); ?>" />
 			$username = $options['username_string'];
 
 			$content =
-				"<object width=\"{$width}\" height=\"{$height}\" classid=\"clsid:d27cdb6e-ae6d-11cf-96b8-444553540000\"
-codebase=\"http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0\">
-<param name=\"flashvars\" value=\"offsite=true&amp;lang=en-us&amp;page_show_url=%2Fphotos%2F{$username}%2Fsets%2F$set%2Fshow%2F&amp;page_show_back_url=%2Fphotos%2F{$username}%2Fsets%2F$set%2F&amp;set_id=$set&amp;jump_to=\" />
-<param name=\"allowFullScreen\" value=\"true\" />
-<param name=\"src\" value=\"http://www.flickr.com/apps/slideshow/show.swf?v=71649\" />
-<embed width=\"{$width}\" height=\"{$height}\" type=\"application/x-shockwave-flash\" src=\"http://www.flickr.com/apps/slideshow/show.swf?v=71649\"
-flashvars=\"offsite=true&amp;lang=en-us&amp;page_show_url=%2Fphotos%2F{$username}%2Fsets%2F$set%2Fshow%2F&amp;page_show_back_url=%2Fphotos%2F{$username}%2Fsets%2F$set%2F&amp;set_id=$set&amp;jump_to=\"
-allowFullScreen=\"true\" /></object>
-";
+				"<iframe height=\"${height}\" width=\"${width}\" src=\"http://www.flickr.com/slideShow/index.gne?set_id=${username}\"></iframe>";
 
 			return $content;
 		}
