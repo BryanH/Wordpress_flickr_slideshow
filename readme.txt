@@ -4,6 +4,8 @@ Tags: slideshow, flickr, image, flash
 Requires at least: 3.4.0
 Tested up to: 3.8.0
 Stable tag: trunk
+License: GPLv3
+License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
 Embed a flickr slideshow in your posts by using a shortcode, for example [flickr_slideshow set=7239827373283]
 
